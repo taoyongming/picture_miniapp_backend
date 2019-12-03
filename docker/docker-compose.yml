@@ -1,0 +1,22 @@
+version: '2'
+services:
+  java.api:
+    restart: "always"
+    image: sgrio/java-oracle:jdk_8
+    container_name: fengyu_mobile
+    network_mode: "host"
+    cap_add:
+      - SYS_PTRACE
+    volumes:
+      - ./:/opt
+      - ./logs:/home/logs
+    environment:
+      - TZ=Asia/Shanghai
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "10"
+    command: ["java", "-Xms512m -Xmx1024m -Xss1024K -Dfile.encoding=UTF-8", "-jar", "/opt/fengyu_mobile.jar"]
+    dns:
+      - 114.114.114.114
