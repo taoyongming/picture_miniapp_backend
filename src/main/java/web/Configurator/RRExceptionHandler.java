@@ -6,7 +6,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import web.entity.ResponseModel;
 import web.util.R;
 import web.util.RRException;
 
@@ -53,5 +56,17 @@ public class RRExceptionHandler {
 	public R handleException(Exception e){
 		logger.error(e.getMessage(), e);
 		return R.error();
+	}
+
+	@ResponseBody
+	@ExceptionHandler(value = MaxUploadSizeExceededException.class)
+	public ResponseModel handle(MaxUploadSizeExceededException e) {
+		ResponseModel model = ResponseModel.getInstance();
+		if (e instanceof MaxUploadSizeExceededException) {
+			model.setMessage("上传的文件超过大小限制");
+		}else{
+			model.setMessage("上传失败");
+		}
+		return model;
 	}
 }

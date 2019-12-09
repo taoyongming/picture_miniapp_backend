@@ -43,21 +43,22 @@ public class ShiroConfig {
         //注意过滤器配置顺序 不能颠倒
         //配置退出 过滤器,其中的具体的退出代码Shiro已经替我们实现了，登出后跳转配置的loginUrl
         // 配置不会被拦截的链接 顺序判断
-        filterChainDefinitionMap.put("/wechat/wxlogin", "anon");
-        filterChainDefinitionMap.put("/wechat/login", "anon");
+        filterChainDefinitionMap.put("/picture", "anon");
+        filterChainDefinitionMap.put("/picture/login", "anon");
         filterChainDefinitionMap.put("/swagger*/**", "anon");
         filterChainDefinitionMap.put("/webjars/**", "anon");
         filterChainDefinitionMap.put("/v2/api-docs", "anon");
-        filterChainDefinitionMap.put("/images/**", "anon");
-
+        filterChainDefinitionMap.put("/static/**", "anon");
+        filterChainDefinitionMap.put("/templates/**", "anon");
+        filterChainDefinitionMap.put("/scripts/**", "anon");
 
         //其余接口一律拦截
         //主要这行代码必须放在所有权限设置的最后，不然会导致所有 url 都被拦截
-        filterChainDefinitionMap.put("/**", "KickoutSessionControlFilter");
+//        filterChainDefinitionMap.put("/**", "KickoutSessionControlFilter");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         shiroFilterFactoryBean.setFilters(filtersMap);
 
-        shiroFilterFactoryBean.setLoginUrl("/wechat/login");
+        shiroFilterFactoryBean.setLoginUrl("/picture/index");
         // 登录成功后要跳转的链接 自行处理。不用shiro进行跳转
         // 设置无权限时跳转的 url;
         shiroFilterFactoryBean.setUnauthorizedUrl("/unauthc");
