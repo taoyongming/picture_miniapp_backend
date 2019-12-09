@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import web.service.IFileService;
 
+/**
+ * 文件管理页面
+ */
 @Controller
 public class IndexController {
 
