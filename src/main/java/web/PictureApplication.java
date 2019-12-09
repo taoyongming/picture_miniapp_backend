@@ -26,8 +26,6 @@ public class PictureApplication {
     @Autowired
     private MongoDbFactory mongoDbFactory;
 
-
-
     public static void main(String[] args) {
         SpringApplication.run(PictureApplication.class, args);
     }

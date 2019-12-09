@@ -22,10 +22,10 @@ import javax.annotation.Resource;
  * @ceeate 2019/11/14
  **/
 @RestController("LoginController")
-@RequestMapping(value = "/wechat")
+@RequestMapping(value = "/login")
 public class LoginController {
-    Logger logger = LoggerFactory.getLogger("LoginController");
 
+    Logger logger = LoggerFactory.getLogger("LoginController");
 
     @Resource
     WechatService wechatService;
