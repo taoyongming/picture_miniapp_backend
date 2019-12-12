@@ -11,7 +11,6 @@ import web.DO.WechatLoginRequest;
 import web.redis.RedisUtil;
 import web.service.WechatService;
 import web.service.WechatUserService;
-import web.util.PasswordUtil;
 
 import javax.annotation.Resource;
 
@@ -46,13 +45,7 @@ public class LoginController {
     }
 
 
-    public static void main(String[] args) {
-        String username = "fengyu";
-        String password = "fengyu";
-        String newPassword = PasswordUtil.md5(password, username);
 
-        System.out.println(newPassword);
-    }
 
 
 

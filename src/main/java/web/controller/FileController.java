@@ -42,7 +42,8 @@ public class FileController {
      */
     @ApiOperation(value = "列表数据", httpMethod = "GET", notes = "列表数据")
     @RequestMapping("/list")
-    public List<FileDocument> list(int pageIndex, int pageSize){
+    public List<FileDocument> list(  @RequestParam(value = "pageIndex", defaultValue = "1", required = true) int pageIndex,
+                                     @RequestParam(value = "pageSize", defaultValue = "5", required = true) int pageSize){
         return fileService.listFilesByPage(pageIndex,pageSize);
     }
 

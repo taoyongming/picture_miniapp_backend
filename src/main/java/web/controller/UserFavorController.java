@@ -23,6 +23,7 @@ public class UserFavorController {
     public R userfavor(String imageMd5, boolean favor) {
 
 
+
         return R.ok();
     }
 

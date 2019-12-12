@@ -1,12 +1,12 @@
 package web.serviceImpl;
 
+import cn.hutool.core.lang.UUID;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.session.Session;
-import org.apache.shiro.subject.Subject;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +20,7 @@ import web.service.WechatService;
 import web.service.WechatUserService;
 import web.util.Constant;
 import web.util.HttpClientUtils;
+import web.util.TokenUtil;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -27,6 +28,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.security.AlgorithmParameters;
 import java.security.Security;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -63,12 +65,8 @@ public class WechatServiceImpl implements WechatService {
 
         //解密获得微信用户信息
         WechatUser wechatUser = this.buildWechatUserAuthInfoDO(loginRequest, sessionKey, openId);
-
-        Subject subject = SecurityUtils.getSubject();
-        if (subject != null) {
-            Session session = subject.getSession();
-            wechatUser.setToken(session.getId().toString());
-        }
+        //WechatUser.class中的信息生成token
+        String token = getToken(wechatUser);
 
         log.info(wechatUser.toString());
 
@@ -81,7 +79,8 @@ public class WechatServiceImpl implements WechatService {
             wechatUserService.updateByOpenId(wechatUser);
         }
 
-        returnJson.put("token", wechatUser.getToken());
+        redisUtil.hset("token",token,openId);
+        returnJson.put("token", token);
         returnJson.put("errorCode", Constant.ERROR_CODE_loginSucc);
         return returnJson.toJSONString();
     }
@@ -107,7 +106,6 @@ public class WechatServiceImpl implements WechatService {
     private WechatUser buildWechatUserAuthInfoDO(WechatLoginRequest loginRequest, String sessionKey, String openId){
         WechatUser wechatUserDO = new WechatUser();
         wechatUserDO.setOpenId(openId);
-
 
         if (loginRequest.getRawData() != null) {
             RawDataDO rawDataDO = JSON.parseObject(loginRequest.getRawData(), RawDataDO.class);
@@ -166,6 +164,21 @@ public class WechatServiceImpl implements WechatService {
         }
         return null;
     }
+
+
+        protected String getToken(WechatUser user) {
+            String token="";
+            token= JWT.create()
+                    .withKeyId(user.getOpenId())
+                    .withIssuer("www.taoyongming.com")
+                    .withIssuedAt(new Date())
+                    .withJWTId("www.taoyongming.com")
+                    .withClaim("session_key", user.getSessionKey())
+                    .withAudience(user.getOpenId())
+                    .sign(Algorithm.HMAC256(user.getOpenId()));
+            return token;
+        }
+
 
 
 
