@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="web.dao.UserFavorMapper" >
+  <resultMap id="BaseResultMap" type="web.entity.UserFavor" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="openid" property="openid" jdbcType="VARCHAR" />
+    <result column="image_md5" property="imageMd5" jdbcType="VARCHAR" />
+    <result column="isFavor" property="isfavor" jdbcType="BIT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, openid, image_md5, isFavor, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_favor
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user_favor
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="web.entity.UserFavor" >
+    insert into user_favor (id, openid, image_md5, 
+      isFavor, create_time)
+    values (#{id,jdbcType=INTEGER}, #{openid,jdbcType=VARCHAR}, #{imageMd5,jdbcType=VARCHAR}, 
+      #{isfavor,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="web.entity.UserFavor" >
+    insert into user_favor
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="openid != null" >
+        openid,
+      </if>
+      <if test="imageMd5 != null" >
+        image_md5,
+      </if>
+      <if test="isfavor != null" >
+        isFavor,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="openid != null" >
+        #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="imageMd5 != null" >
+        #{imageMd5,jdbcType=VARCHAR},
+      </if>
+      <if test="isfavor != null" >
+        #{isfavor,jdbcType=BIT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="web.entity.UserFavor" >
+    update user_favor
+    <set >
+      <if test="openid != null" >
+        openid = #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="imageMd5 != null" >
+        image_md5 = #{imageMd5,jdbcType=VARCHAR},
+      </if>
+      <if test="isfavor != null" >
+        isFavor = #{isfavor,jdbcType=BIT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="web.entity.UserFavor" >
+    update user_favor
+    set openid = #{openid,jdbcType=VARCHAR},
+      image_md5 = #{imageMd5,jdbcType=VARCHAR},
+      isFavor = #{isfavor,jdbcType=BIT},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

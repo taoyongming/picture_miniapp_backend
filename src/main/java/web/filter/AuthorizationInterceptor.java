@@ -48,7 +48,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             // 获取 openId
             openId = JWT.decode(token).getKeyId();
             // 添加request参数，用于传递userid
-            httpServletRequest.setAttribute("currentUser", openId);
+            httpServletRequest.setAttribute("openid", openId);
             // 根据userId 查询用户信息
             WechatUser user = userService.getByOpenId(openId);
             if (user == null) {

@@ -6,6 +6,7 @@ import web.entity.WechatUser;
 
 
 public interface WechatUserMapper {
+
     int deleteByPrimaryKey(Integer id);
 
     int insert(WechatUser record);

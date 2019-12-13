@@ -24,9 +24,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+
 @RestController
-@RequestMapping("files")
+@RequestMapping("/files")
 @Api(tags = "FileController", description = "文件上传下载")
 public class FileController {
 

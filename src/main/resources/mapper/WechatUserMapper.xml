@@ -19,8 +19,8 @@
     <result column="deleted_at" property="deletedAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, session_key, token, nickname, avatar_url, gender, country, province, city, mobile, 
-    open_id, union_id, created_at, updated_at, deleted_at
+    id, session_key, token, nickname, avatar_url, gender, country, province,
+    city, mobile, open_id, union_id, created_at, updated_at, deleted_at
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -28,23 +28,38 @@
     from wechat_user
     where id = #{id,jdbcType=INTEGER}
   </select>
+
+  <select id="selectByOpenId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from wechat_user
+    where open_id = #{openId,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByToken" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from wechat_user
+    where token = #{token,jdbcType=VARCHAR}
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from wechat_user
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="web.entity.WechatUser" >
-    insert into wechat_user (id, session_key, token, 
-      nickname, avatar_url, gender, 
-      country, province, city, 
-      mobile, open_id, union_id, 
-      created_at, updated_at, deleted_at
-      )
-    values (#{id,jdbcType=INTEGER}, #{sessionKey,jdbcType=VARCHAR}, #{token,jdbcType=VARCHAR}, 
-      #{nickname,jdbcType=VARCHAR}, #{avatarUrl,jdbcType=VARCHAR}, #{gender,jdbcType=INTEGER}, 
-      #{country,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
-      #{mobile,jdbcType=VARCHAR}, #{openId,jdbcType=VARCHAR}, #{unionId,jdbcType=VARCHAR}, 
-      #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}, #{deletedAt,jdbcType=TIMESTAMP}
-      )
+    insert into wechat_user (id, session_key,
+      token, nickname, avatar_url, 
+      gender, country, province, 
+      city, mobile, open_id, 
+      union_id, created_at, updated_at, 
+      deleted_at)
+    values (#{id,jdbcType=INTEGER}, #{sessionKey,jdbcType=VARCHAR},
+      #{token,jdbcType=VARCHAR}, #{nickname,jdbcType=VARCHAR}, #{avatarUrl,jdbcType=VARCHAR}, 
+      #{gender,jdbcType=INTEGER}, #{country,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
+      #{city,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{openId,jdbcType=VARCHAR}, 
+      #{unionId,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}, 
+      #{deletedAt,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="web.entity.WechatUser" >
     insert into wechat_user
@@ -52,6 +67,7 @@
       <if test="id != null" >
         id,
       </if>
+
       <if test="sessionKey != null" >
         session_key,
       </if>
@@ -99,6 +115,7 @@
       <if test="id != null" >
         #{id,jdbcType=INTEGER},
       </if>
+
       <if test="sessionKey != null" >
         #{sessionKey,jdbcType=VARCHAR},
       </if>
@@ -146,6 +163,7 @@
   <update id="updateByPrimaryKeySelective" parameterType="web.entity.WechatUser" >
     update wechat_user
     <set >
+
       <if test="sessionKey != null" >
         session_key = #{sessionKey,jdbcType=VARCHAR},
       </if>
@@ -191,9 +209,61 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <update id="updateByOpenId" parameterType="web.entity.WechatUser" >
+    update wechat_user
+    <set >
+
+      <if test="sessionKey != null" >
+        session_key = #{sessionKey,jdbcType=VARCHAR},
+      </if>
+      <if test="token != null" >
+        token = #{token,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null" >
+        nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="avatarUrl != null" >
+        avatar_url = #{avatarUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        gender = #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="country != null" >
+        country = #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="openId != null" >
+        open_id = #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="unionId != null" >
+        union_id = #{unionId,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null" >
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null" >
+        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedAt != null" >
+        deleted_at = #{deletedAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where open_id = #{openId,jdbcType=VARCHAR}
+  </update>
+
   <update id="updateByPrimaryKey" parameterType="web.entity.WechatUser" >
     update wechat_user
-    set session_key = #{sessionKey,jdbcType=VARCHAR},
+    set system_user_id = #{systemUserId,jdbcType=INTEGER},
+      session_key = #{sessionKey,jdbcType=VARCHAR},
       token = #{token,jdbcType=VARCHAR},
       nickname = #{nickname,jdbcType=VARCHAR},
       avatar_url = #{avatarUrl,jdbcType=VARCHAR},
@@ -209,4 +279,8 @@
       deleted_at = #{deletedAt,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+
+
+
 </mapper>
