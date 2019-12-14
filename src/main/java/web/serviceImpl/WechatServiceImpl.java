@@ -79,10 +79,9 @@ public class WechatServiceImpl implements WechatService {
             wechatUserService.updateByOpenId(wechatUser);
         }
 
-        redisUtil.hset("token",token,openId);
+        redisUtil.hset("token",token,openId,3*24*60*60);
         returnJson.put("token", token);
-        returnJson.put("token", token);
-        returnJson.put("token", token);
+        returnJson.put("openId", openId);
         returnJson.put("errorCode", Constant.ERROR_CODE_loginSucc);
         return returnJson.toJSONString();
     }
