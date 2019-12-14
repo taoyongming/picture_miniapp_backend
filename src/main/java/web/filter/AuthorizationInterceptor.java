@@ -11,6 +11,7 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import web.entity.WechatUser;
+import web.redis.RedisUtil;
 import web.service.WechatUserService;
 import web.util.RRException;
 
@@ -26,6 +27,8 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
     @Autowired
     WechatUserService userService;
 
+    @Autowired
+    RedisUtil redisUtil;
     //拦截器：请求之前preHandle
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object object) throws Exception {
@@ -42,11 +45,8 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         if (token == null) {
             throw new RuntimeException("无token，请重新登录");
         }
-        // 获取 token 中的 openId
-        String openId;
-        try {
             // 获取 openId
-            openId = JWT.decode(token).getKeyId();
+            String  openId = redisUtil.hget("token",token).toString();
             // 添加request参数，用于传递userid
             httpServletRequest.setAttribute("openid", openId);
             // 根据userId 查询用户信息
@@ -54,24 +54,6 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             if (user == null) {
                 throw new RRException("用户不存在，请重新登录");
             }
-
-            try {
-                String session_key = JWT.decode(token).getClaim("session_key").as(String.class);
-                // 添加request参数，用于传递sessionKey
-                httpServletRequest.setAttribute("sessionKey", session_key);
-            } catch (Exception e) {
-            }
-
-            // 验证 密码
-            JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(user.getOpenId())).build();
-            try {
-                jwtVerifier.verify(token);
-            } catch (JWTVerificationException e) {
-                throw new RuntimeException("401");
-            }
-        } catch (JWTDecodeException j) {
-            throw new RuntimeException("401");
-        }
 
         return true;
 

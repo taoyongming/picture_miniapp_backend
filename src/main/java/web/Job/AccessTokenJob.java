@@ -54,7 +54,7 @@ public class AccessTokenJob {
         System.out.println("accessTokenJob定时任务结束");
     }
 
-    @Scheduled(cron="0 */110 * * * ? ")   //每110分钟执行一次
+//    @Scheduled(cron="0 */110 * * * ? ")   //每110分钟执行一次
     public void gzhAccessTokenJob() {
         System.out.println("gzhaccessTokenJob定时任务开始");
         // 小程序唯一标识 (在微信小程序管理后台获取)

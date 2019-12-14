@@ -65,9 +65,9 @@ public class WechatServiceImpl implements WechatService {
 
         //解密获得微信用户信息
         WechatUser wechatUser = this.buildWechatUserAuthInfoDO(loginRequest, sessionKey, openId);
-        //WechatUser.class中的信息生成token
-        String token = getToken(wechatUser);
 
+        String token = UUID.randomUUID().toString();
+        wechatUser.setToken(token);
         log.info(wechatUser.toString());
 
         // 根据openid查询用户
@@ -80,6 +80,8 @@ public class WechatServiceImpl implements WechatService {
         }
 
         redisUtil.hset("token",token,openId);
+        returnJson.put("token", token);
+        returnJson.put("token", token);
         returnJson.put("token", token);
         returnJson.put("errorCode", Constant.ERROR_CODE_loginSucc);
         return returnJson.toJSONString();
@@ -106,7 +108,7 @@ public class WechatServiceImpl implements WechatService {
     private WechatUser buildWechatUserAuthInfoDO(WechatLoginRequest loginRequest, String sessionKey, String openId){
         WechatUser wechatUserDO = new WechatUser();
         wechatUserDO.setOpenId(openId);
-
+        wechatUserDO.setSessionKey(sessionKey);
         if (loginRequest.getRawData() != null) {
             RawDataDO rawDataDO = JSON.parseObject(loginRequest.getRawData(), RawDataDO.class);
             wechatUserDO.setNickname(rawDataDO.getNickName());
@@ -115,7 +117,7 @@ public class WechatServiceImpl implements WechatService {
             wechatUserDO.setCity(rawDataDO.getCity());
             wechatUserDO.setCountry(rawDataDO.getCountry());
             wechatUserDO.setProvince(rawDataDO.getProvince());
-            wechatUserDO.setSessionKey(sessionKey);
+
         }
 
         // 解密加密信息，获取unionID
@@ -166,18 +168,18 @@ public class WechatServiceImpl implements WechatService {
     }
 
 
-        protected String getToken(WechatUser user) {
-            String token="";
-            token= JWT.create()
-                    .withKeyId(user.getOpenId())
-                    .withIssuer("www.taoyongming.com")
-                    .withIssuedAt(new Date())
-                    .withJWTId("www.taoyongming.com")
-                    .withClaim("session_key", user.getSessionKey())
-                    .withAudience(user.getOpenId())
-                    .sign(Algorithm.HMAC256(user.getOpenId()));
-            return token;
-        }
+//        protected String getToken(WechatUser user) {
+//            String token="";
+//            token= JWT.create()
+//                    .withKeyId(user.getOpenId())
+//                    .withIssuer("www.taoyongming.com")
+//                    .withIssuedAt(new Date())
+//                    .withJWTId("www.taoyongming.com")
+//                    .withClaim("session_key", user.getSessionKey())
+//                    .withAudience(user.getOpenId())
+//                    .sign(Algorithm.HMAC256(user.getOpenId()));
+//            return token;
+//        }
 
 
 

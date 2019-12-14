@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 
 @ApiModel
-public class WechatLoginRequest {
+public class  WechatLoginRequest {
 
     @ApiModelProperty(value = "微信code", required = true)
     private String code;

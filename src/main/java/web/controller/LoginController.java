@@ -4,9 +4,7 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import web.DO.WechatLoginRequest;
 import web.redis.RedisUtil;
 import web.service.WechatService;
@@ -34,10 +32,10 @@ public class LoginController {
     @Autowired
     RedisUtil redisUtil;
 
-    @ApiOperation(value = "1.微信授权接口", httpMethod = "GET" , notes = "微信授权接口")
-    @GetMapping("/wxlogin")
+    @ApiOperation(value = "1.微信授权接口", httpMethod = "POST" , notes = "微信授权接口")
+    @PostMapping("/wxlogin")
     public String login(
-            WechatLoginRequest loginRequest
+            @RequestBody WechatLoginRequest loginRequest
          ) throws Exception {
 
         String userInfoInfo = wechatService.getUserInfoMap(loginRequest);
