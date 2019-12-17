@@ -31,8 +31,6 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         if (!(object instanceof HandlerMethod)) {
             return true;
         }
-        HandlerMethod handlerMethod = (HandlerMethod) object;
-        Method method = handlerMethod.getMethod();
 
         String token = httpServletRequest.getHeader("token");// 从 http 请求头中取出 token
 
@@ -41,9 +39,12 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             throw new RuntimeException("无token，请重新登录");
         }
             // 获取 openId
-            String  openId = redisUtil.hget("token",token).toString();
+            String  openId = redisUtil.hget("token",token) == null ? "" : redisUtil.hget("token",token).toString();
+        if (openId.equals("")) {
+            throw new RRException("用户不存在，请重新登录");
+        }
             // 添加request参数，用于传递userid
-            httpServletRequest.setAttribute("openid", openId);
+            httpServletRequest.getSession().setAttribute("openid",openId);
             // 根据userId 查询用户信息
             WechatUser user = userService.getByOpenId(openId);
             if (user == null) {

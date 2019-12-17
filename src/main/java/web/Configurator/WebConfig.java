@@ -20,7 +20,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         // 添加拦截器，配置拦截地址 其中/**表示当前目录以及所有子目录（递归），/*表示当前目录，不包括子目录。
         registry.addInterceptor(interceptor).addPathPatterns("/**")
-                .excludePathPatterns("login/wxlogin")
+                .excludePathPatterns("/login/wxlogin")
                 .excludePathPatterns("/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**");
     }
 }

@@ -35,10 +35,8 @@ public class RRExceptionHandler {
 	}
 	@ExceptionHandler(RuntimeException.class)
 	public R handleRuntimeException(RuntimeException e){
-		R r = new R();
-		r.put("msg", e.getMessage());
 
-		return r;
+		return R.error(e.getMessage());
 	}
 
 
