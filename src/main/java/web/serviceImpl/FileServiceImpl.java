@@ -17,7 +17,9 @@ import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import web.entity.FileDocument;
+import web.entity.Images;
 import web.service.IFileService;
+import web.service.ImageService;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,6 +38,9 @@ public class FileServiceImpl implements IFileService {
     private GridFsTemplate gridFsTemplate;
     @Autowired
     private GridFSBucket gridFSBucket;
+    @Autowired
+    private ImageService imageService;
+
 
     /**
      * js文件流上传附件
@@ -64,7 +69,7 @@ public class FileServiceImpl implements IFileService {
      * @return
      */
     @Override
-    public FileDocument saveFile(String md5, MultipartFile file) {
+    public FileDocument saveFile(String md5, MultipartFile file,String openId) {
         //已存在该文件，则实现秒传
         FileDocument fileDocument = getByMd5(md5);
         if(fileDocument != null){
@@ -80,10 +85,18 @@ public class FileServiceImpl implements IFileService {
         String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
         fileDocument.setSuffix(suffix);
 
+        Images images = new Images();
+        images.setImageMd5(md5);
+        images.setOpenId(openId);
         try {
+
             String gridfsId = uploadFileToGridFS(file.getInputStream() , file.getContentType());
             fileDocument.setGridfsId(gridfsId);
             fileDocument = mongoTemplate.save(fileDocument , collectionName);
+
+
+            imageService.save(images);
+
         }catch (IOException ex){
             ex.printStackTrace();
         }

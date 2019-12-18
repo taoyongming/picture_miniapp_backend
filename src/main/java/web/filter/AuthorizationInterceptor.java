@@ -34,22 +34,22 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
 
         String token = httpServletRequest.getHeader("token");// 从 http 请求头中取出 token
 
-        // 执行认证
-        if (token == null) {
-            throw new RuntimeException("无token，请重新登录");
-        }
-            // 获取 openId
-            String  openId = redisUtil.hget("token",token) == null ? "" : redisUtil.hget("token",token).toString();
-        if (openId.equals("")) {
-            throw new RRException("用户不存在，请重新登录");
-        }
-            // 添加request参数，用于传递userid
-            httpServletRequest.getSession().setAttribute("openid",openId);
-            // 根据userId 查询用户信息
-            WechatUser user = userService.getByOpenId(openId);
-            if (user == null) {
-                throw new RRException("用户不存在，请重新登录");
-            }
+//        // 执行认证
+//        if (token == null) {
+//            throw new RuntimeException("无token，请重新登录");
+//        }
+//            // 获取 openId
+//            String  openId = redisUtil.hget("token",token) == null ? "" : redisUtil.hget("token",token).toString();
+//        if (openId.equals("")) {
+//            throw new RRException("用户不存在，请重新登录");
+//        }
+//            // 添加request参数，用于传递userid
+//            httpServletRequest.getSession().setAttribute("openid",openId);
+//            // 根据userId 查询用户信息
+//            WechatUser user = userService.getByOpenId(openId);
+//            if (user == null) {
+//                throw new RRException("用户不存在，请重新登录");
+//            }
 
         return true;
 

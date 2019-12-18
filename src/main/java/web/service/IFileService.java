@@ -17,7 +17,7 @@ public interface IFileService {
      * @param file
      * @return
      */
-    FileDocument saveFile(String md5, MultipartFile file);
+    FileDocument saveFile(String md5, MultipartFile file,String openId);
 
     /**
      * 保存文件 - js文件流

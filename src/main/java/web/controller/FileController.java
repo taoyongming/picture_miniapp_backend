@@ -155,7 +155,7 @@ public class FileController {
         try {
             if(file != null && !file.isEmpty()){
                 String fileMd5 = SecureUtil.md5(file.getInputStream());
-                FileDocument fileDocument = fileService.saveFile(fileMd5 , file);
+                FileDocument fileDocument = fileService.saveFile(fileMd5 , file,null);
 
                 System.out.println(fileDocument);
                 model.setData(fileDocument.getId());

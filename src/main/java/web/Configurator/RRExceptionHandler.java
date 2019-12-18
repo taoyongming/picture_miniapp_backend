@@ -66,9 +66,9 @@ public class RRExceptionHandler {
 	public ResponseModel handle(MaxUploadSizeExceededException e) {
 		ResponseModel model = ResponseModel.getInstance();
 		if (e instanceof MaxUploadSizeExceededException) {
-			model.setMessage("上传的文件超过大小限制");
+			R.error("上传的文件超过大小限制");
 		}else{
-			model.setMessage("上传失败");
+			R.error("上传失败");
 		}
 		return model;
 	}
